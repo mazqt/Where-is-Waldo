@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import react, { useState } from "react";
+import "./App.css";
+import StartScreen from "./Components/StartScreen";
+import Gameboard from "./Components/Gameboard";
+import Score from "./Components/Score";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [playing, setPlaying] = useState(false);
+
+  if (playing) {
+    return (
+      <div>
+        <Gameboard />
+        <Score />
+        <button type="button" onClick={setPlaying.bind(null, false)}>
+          Stop
+        </button>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <StartScreen />
+        <button type="button" onClick={setPlaying.bind(null, true)}>
+          Start
+        </button>
+      </div>
+    );
+  }
 }
 
 export default App;
