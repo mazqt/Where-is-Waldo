@@ -1,9 +1,21 @@
 import react, { useState } from "react";
 
-function CharacterSelect() {
+function CharacterSelect(props) {
   return (
     <div className="CharacterSelect">
-      <h1>I'm the CharacterSelect</h1>
+      {props.characters.map((character) => {
+        return (
+          <div key={character}>
+            <label htmlFor={character}>{character}</label>
+            <input
+              type="radio"
+              id={character}
+              name="character"
+              value={character}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }

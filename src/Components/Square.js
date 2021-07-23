@@ -1,11 +1,15 @@
 import react, { useState } from "react";
 import CharacterSelect from "./CharacterSelect";
+import "./Square.css";
 
-function Square() {
+function Square(props) {
   return (
-    <div className="Square">
-      <h1>I'm the Square</h1>
-      <CharacterSelect />
+    <div
+      className={props.class}
+      pos={props.pos}
+      onClick={props.setCurrentID.bind(null, props.pos)}
+    >
+      {/* <CharacterSelect /> */}
     </div>
   );
 }

@@ -1,9 +1,11 @@
 import react, { useState } from "react";
 
-function Score() {
+function Score(props) {
+  console.log(props.hits);
   return (
     <div className="Score">
-      <h1>I'm the Score</h1>
+      <h2>Hits: {props.hits}</h2>
+      <h2>Misses: {props.misses}</h2>
     </div>
   );
 }

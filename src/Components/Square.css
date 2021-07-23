@@ -1,0 +1,12 @@
+.Square {
+  width: 8vw;
+  height: 16vh;
+}
+
+.Square:hover {
+  outline: 3px solid black;
+}
+
+.Selected {
+  outline: 3px dotted red;
+}
