@@ -66,6 +66,14 @@ function App() {
     }
   }, [playing]);
 
+  function submitChar(choice) {
+    if (gameData.positions[choice] == currentID) {
+      setHits(hits + 1);
+    } else {
+      setMisses(misses + 1);
+    }
+  }
+
   if (playing && gameLoaded) {
     return (
       <div>
@@ -79,7 +87,10 @@ function App() {
           <button type="button" onClick={setPlaying.bind(null, false)}>
             Stop
           </button>
-          <CharacterSelect characters={gameData.characters} />
+          <CharacterSelect
+            characters={gameData.characters}
+            submitChar={submitChar}
+          />
         </div>
       </div>
     );

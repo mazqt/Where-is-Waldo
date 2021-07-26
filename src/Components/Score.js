@@ -1,7 +1,6 @@
 import react, { useState } from "react";
 
 function Score(props) {
-  console.log(props.hits);
   return (
     <div className="Score">
       <h2>Hits: {props.hits}</h2>
