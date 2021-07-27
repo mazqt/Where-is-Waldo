@@ -7,6 +7,7 @@ import Score from "./Components/Score";
 import "firebase/analytics";
 import "firebase/firestore";
 import CharacterSelect from "./Components/CharacterSelect";
+import uuid from "uuid"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDIZQJvndsGa2X-lEU-G7EtFA3llsyv0-s",
@@ -29,6 +30,10 @@ function App() {
   const [hits, setHits] = useState(0);
   const [misses, setMisses] = useState(0);
   const [currentID, setCurrentID] = useState(0);
+  const [characters, setCharacters] = useState(0);
+  const [won, setWon] = useState(false);
+  const [id, setID] = useState("")
+  const [time, setTime] = useState()
   const db = firebase.firestore();
 
   async function loadOptions() {
@@ -41,11 +46,38 @@ function App() {
   async function loadGame() {
     let querySnapshot = await db.collection("games").doc(chosenGame).get();
     setGameData(querySnapshot.data());
+    setCharacters(querySnapshot.data().characters);
   }
 
   function chooseGame(event) {
     setChosenGame(event.target.value);
   }
+
+  useEffect(() => {
+    if (characters.length === 0) {
+      setWon(true);
+      const end = Date.now()
+      db.collection("times").doc(id).get().then((querySnapshot) => {
+        const start = querySnapshot.data().time
+        setTime((end - start) / 1000)
+      })
+    }
+  }, [characters]);
+
+  useEffect(() => {
+    if (time != null) {
+      db.collection("games").doc(chosenGame).get().then((querySnapshot) => {
+        let highscores = querySnapshot.data().highscores
+        const name = window.prompt("Enter your name so that we can save your score!", "Waldo")
+        highscores.push({[time]: name})
+        highscores.sort((a, b) => {
+          return Object.keys(a)[0] - Object.keys(b)[0]
+        })
+        highscores = highscores.slice(0, 10)
+        db.collection("games").doc(chosenGame).update({highscores: highscores})
+      })
+    }
+  }, [time])
 
   useEffect(() => {
     setLoadingGames(true);
@@ -62,6 +94,10 @@ function App() {
     if (playing) {
       loadGame().then(() => {
         setGameLoaded(true);
+        const start = Date.now()
+        const val = uuid.v4()
+        setID(val)
+        db.collection("times").doc(val).set({time: start})
       });
     }
   }, [playing]);
@@ -69,31 +105,33 @@ function App() {
   function submitChar(choice) {
     if (gameData.positions[choice] == currentID) {
       setHits(hits + 1);
+      setCharacters(characters.filter((char) => char !== choice));
     } else {
       setMisses(misses + 1);
     }
   }
 
   if (playing && gameLoaded) {
-    return (
-      <div>
-        <Gameboard
-          gameData={gameData}
-          setCurrentID={setCurrentID}
-          currentID={currentID}
-        />
-        <div id="gameInfo">
-          <Score hits={hits} misses={misses} />
-          <button type="button" onClick={setPlaying.bind(null, false)}>
-            Stop
-          </button>
-          <CharacterSelect
-            characters={gameData.characters}
-            submitChar={submitChar}
+    if (!won) {
+      return (
+        <div>
+          <Gameboard
+            gameData={gameData}
+            setCurrentID={setCurrentID}
+            currentID={currentID}
           />
+          <div id="gameInfo">
+            <Score hits={hits} misses={misses} />
+            <button type="button" onClick={setPlaying.bind(null, false)}>
+              Stop
+            </button>
+            <CharacterSelect characters={characters} submitChar={submitChar} />
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <div>You've won!! You did it it {time} seconds</div>;
+    }
   } else {
     if (loadingGames) {
       return (
