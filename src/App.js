@@ -40,7 +40,7 @@ function App() {
 
   async function loadOptions() {
     let output = [];
-    let querySnapshot = await db.collection("games").get();
+    let querySnapshot = await db.collection("games").orderBy("id", "asc").get();
     querySnapshot.forEach((doc) => output.push(doc.id));
     return output;
   }
@@ -124,7 +124,10 @@ function App() {
   }, [playing]);
 
   function submitChar(choice) {
-    if (gameData.positions[choice] == currentID) {
+    console.log(choice);
+    console.log(currentID);
+    console.log(gameData.positions[choice]);
+    if (gameData.positions[choice].includes(currentID)) {
       setHits(hits + 1);
       setCharacters(characters.filter((char) => char !== choice));
     } else {
@@ -135,7 +138,7 @@ function App() {
   if (playing && gameLoaded) {
     if (!won) {
       return (
-        <div>
+        <div id="game">
           <Gameboard
             gameData={gameData}
             setCurrentID={setCurrentID}
@@ -153,7 +156,7 @@ function App() {
     } else {
       if (time != null) {
         return (
-          <div>
+          <div id="gameWon">
             <div>You've won!! You did it it {time} seconds</div>
             <ol>
               {scoreNames.map((name, index) => {
@@ -164,23 +167,28 @@ function App() {
                 );
               })}
             </ol>
+            <button type="button" onClick={() => window.location.reload()}>
+              Play again
+            </button>
           </div>
         );
       } else {
-        return <div>You've won!! You did it it {time} seconds</div>;
+        return (
+          <div id="gameWon">You've won!! You did it it {time} seconds</div>
+        );
       }
     }
   } else {
     if (loadingGames) {
       return (
-        <div>
+        <div id="start">
           <StartScreen />
           <h2>Loading Games</h2>
         </div>
       );
     } else {
       return (
-        <div>
+        <div id="start">
           <StartScreen />
           <select name="gameSelection" id="gameSelection" onChange={chooseGame}>
             {games.map((game) => {
