@@ -188,21 +188,30 @@ function App() {
       );
     } else {
       return (
-        <div id="start">
-          <StartScreen />
-          <select name="gameSelection" id="gameSelection" onChange={chooseGame}>
-            {games.map((game) => {
-              return (
-                <option value={game} key={game}>
-                  {game}
-                </option>
-              );
-            })}
-          </select>
-          <br></br>
-          <button type="button" onClick={setPlaying.bind(null, true)}>
-            Start
-          </button>
+        <div>
+          <div id="start">
+            <StartScreen />
+            <select
+              name="gameSelection"
+              id="gameSelection"
+              onChange={chooseGame}
+            >
+              {games.map((game) => {
+                return (
+                  <option value={game} key={game}>
+                    {game}
+                  </option>
+                );
+              })}
+            </select>
+            <br></br>
+            <button type="button" onClick={setPlaying.bind(null, true)}>
+              Start
+            </button>
+          </div>
+          <footer>
+            <a href="https://github.com/mazqt/Where-is-Waldo">Github Repo</a>
+          </footer>
         </div>
       );
     }
