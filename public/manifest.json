@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Where's Waldo",
+  "name": "Where's Waldo",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +18,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "start_url": "/",
   "theme_color": "#000000",
   "background_color": "#ffffff"
 }

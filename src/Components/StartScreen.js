@@ -6,6 +6,11 @@ function StartScreen() {
     <div className="StartScreen">
       <h1>Where's Waldo!</h1>
       <h3>
+        PSA for phone users: This website isn't made to work properly on mobile
+        devices, however it's functional as long as you use landscape
+        orientation.
+      </h3>
+      <h3>
         Use the dropdown menu to select a picture, and press start to play a
         game of Where's Waldo! You'll be provided with an image in which several
         characters are hiding, and a list of them from which to choose. Once you
